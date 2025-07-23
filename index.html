@@ -3,25 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Data Validation App</title>
+    <title>Offline Data Validation App</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="manifest" href="manifest.json">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-        }
-        .loader {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
         .searchable-dropdown {
             position: relative;
@@ -47,13 +36,6 @@
         }
         .dropdown-content div:hover {background-color: #f1f1f1}
         .highlighted { background-color: #e2e8f0; }
-        .thumbnail-container {
-            border: 2px solid transparent;
-        }
-        .thumbnail-container.processing {
-            border-color: #3b82f6; /* blue-500 */
-            box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
-        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -70,58 +52,11 @@
         </div>
 
         <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-4xl mb-8">
-            <h1 class="text-3xl font-bold text-center text-blue-700 mb-6">Smart Data Validation App</h1>
-            <p class="text-sm text-center text-gray-600 mb-4">User ID: <span id="user-id" class="font-mono bg-gray-200 px-2 py-1 rounded-md">Loading...</span></p>
-
-            <!-- 1. Capture or Upload -->
-            <div class="mb-8">
-                <h2 class="text-2xl font-semibold text-blue-600 mb-4">1. Capture or Upload Image</h2>
-                <input type="file" accept="image/*" id="file-input" class="hidden" multiple />
-                <div id="capture-options" class="flex flex-col items-center space-y-4">
-                    <div class="flex flex-wrap justify-center gap-4">
-                        <button id="start-camera-btn" class="px-6 py-3 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 flex items-center gap-2">Start Camera</button>
-                        <button id="upload-btn" class="px-6 py-3 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                            Upload from Gallery
-                        </button>
-                    </div>
-                </div>
-                <div id="camera-view" class="hidden text-center">
-                    <video id="video" autoplay playsinline class="w-full max-w-md rounded-lg shadow-md border border-gray-300 bg-black mx-auto"></video>
-                    <div class="flex flex-wrap justify-center gap-4 mt-4">
-                        <button id="capture-btn" class="px-6 py-3 bg-red-600 text-white rounded-lg shadow-md hover:bg-red-700">Capture Photo</button>
-                        <button id="switch-camera-btn" class="px-6 py-3 bg-gray-500 text-white rounded-lg shadow-md hover:bg-gray-600 flex items-center gap-2">
-                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 19H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5"/><path d="M13 5h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-5"/><path d="m18 12-3-3 3-3"/><path d="m6 12 3 3-3 3"/></svg>
-                            Switch Camera
-                        </button>
-                    </div>
-                </div>
-                <canvas id="canvas" class="hidden"></canvas>
-            </div>
-
-            <!-- Image Queue -->
-            <div id="queue-section" class="mb-8 hidden">
-                <h2 class="text-2xl font-semibold text-blue-600 mb-4">Processing Queue</h2>
-                <div id="thumbnail-queue" class="flex flex-wrap gap-4 p-4 bg-gray-100 rounded-lg">
-                    <!-- Thumbnails will be injected here -->
-                </div>
-            </div>
-
-            <!-- 2. Preview & Analysis -->
-            <div id="preview-section" class="mb-8 text-center hidden">
-                <h2 class="text-2xl font-semibold text-blue-600 mb-4">2. Image Preview & Analysis</h2>
-                <div class="relative inline-block">
-                    <img id="captured-image-preview" src="" alt="Captured or Uploaded" class="w-full max-w-md mx-auto rounded-lg shadow-md border" />
-                    <div id="analysis-loader" class="absolute inset-0 bg-black bg-opacity-50 flex-col items-center justify-center rounded-lg hidden">
-                        <div class="loader"></div>
-                        <p class="text-white text-lg font-semibold mt-4">Analyzing Image...</p>
-                    </div>
-                </div>
-            </div>
+            <h1 class="text-3xl font-bold text-center text-blue-700 mb-6">Offline Data Validation App</h1>
             
-            <!-- 3. Data Form -->
+            <!-- 1. Data Form -->
             <div class="mb-8">
-                <h2 class="text-2xl font-semibold text-blue-600 mb-4">3. Enter & Validate Data</h2>
+                <h2 class="text-2xl font-semibold text-blue-600 mb-4">Enter & Validate Data</h2>
                 <form id="data-form">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-4">
                         <!-- Company Name -->
@@ -171,10 +106,6 @@
                             <input type="text" id="productTemperature" placeholder="e.g., 2°C" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm">
                             <div id="temp-validation-icon" class="absolute right-3 top-10"></div>
                             <p id="temp-validation-message" class="text-xs mt-1"></p>
-                            <button type="button" id="temp-insight-btn" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 disabled:opacity-50 text-sm flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M12 8V4H8"/><rect x="4" y="12" width="16" height="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v-2a3 3 0 0 0-3-3H9a3 3 0 0 0-3 3v2"/></svg>
-                                <span id="temp-insight-btn-text">Get Temp Insights</span>
-                            </button>
                         </div>
                         <!-- Quantity & Comments -->
                         <div class="md:col-span-2">
@@ -182,13 +113,13 @@
                             <textarea id="quantityComment" rows="3" class="mt-1 block w-full p-3 border border-gray-300 rounded-lg shadow-sm resize-y"></textarea>
                         </div>
                     </div>
-                    <button type="submit" id="save-data-btn" class="w-full px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 disabled:opacity-50">Save Data</button>
+                    <button type="submit" id="save-data-btn" class="w-full px-6 py-3 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700">Save Data</button>
                 </form>
             </div>
             
-            <!-- 4. Stored Data -->
+            <!-- 2. Stored Data -->
             <div class="mb-8">
-                <h2 class="text-2xl font-semibold text-blue-600 mb-4">4. Stored Data</h2>
+                <h2 class="text-2xl font-semibold text-blue-600 mb-4">Stored Data</h2>
                 <div id="data-table-container" class="overflow-x-auto rounded-lg shadow-md border">
                     <table class="min-w-full bg-white">
                         <thead class="bg-gray-200">
@@ -212,28 +143,18 @@
                  <p id="no-data-message" class="text-gray-600 text-center mt-4 hidden">No data entries yet.</p>
             </div>
 
-            <!-- 5. Export -->
+            <!-- 3. Export -->
             <div class="text-center">
-                <h2 class="text-2xl font-semibold text-blue-600 mb-4">5. Export Data</h2>
+                <h2 class="text-2xl font-semibold text-blue-600 mb-4">Export Data</h2>
                 <button id="export-btn" class="px-8 py-4 bg-purple-600 text-white rounded-lg shadow-lg hover:bg-purple-700 disabled:opacity-50">Download as Excel (XLSX)</button>
             </div>
         </div>
     </div>
 
-    <script type="module">
-        // Firebase Imports
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, deleteDoc, doc, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
+    <script>
         // --- App State and Constants ---
-        const appId = typeof window.__app_id !== 'undefined' ? window.__app_id : 'default-app-id';
-        let db, auth, userId, isAuthReady = false;
-        let cameraStream = null;
-        let capturedImage = null;
+        let db;
         let dataEntries = [];
-        let imageQueue = [];
-        let cameraFacingMode = 'environment';
         
         const companyNames = [ "Aquat", "McCain", "IBHAR", "Lambweston", "Saudi Industrial Projects Co. \"Pepsi\"", "AATCO", "Emad Bakery", "Naser Pack", "NAPCO Multipack", "Saudi Factory for Aluminum Containers", "Al-Marai Co.", "Jeladan Co.", "Halawani Brothers Co.", "Afia International Company", "Gulf Factory", "Fine Co.", "Al-Amal Co.", "Al-Sharq suppling Trade Co.", "Al-Gandorah Pack", "Unilever", "Essam Qabani Co. \"olive oil\"", "IFFCO Co.", "Freshly (salt, syrub)", "ALBAIK Warehouse", "Al Rashed Bakery", "Al-Attas", "Pure Food", "AL-SALMAN BAKERY & TRADING CO.", "ORIENT PROVISION & TRADING CO.", "Daily Fresh Food Company SDN.Bhd", "Nestle", "FAFA Adhesive labelling industry", "AL MUNAJEM", "JOODY PACK", "Orego Packaging", "Saudi Foam Trays Manufacturing Company", "Eraqi Co.", "UCIC", "University Factories for Paper Products Co. Ltd.", "AFAN Co.", "Noor Co.", "Abu Dawood - Ecolab", "Rahima Eggs", "Lipton", "ESNAD Spices", "BidFood", "Al Rashid Bakery", "Lusine", "Modern Bakery", "Berain water" ];
         const productLists = { "Al-Marai Co.": [ "Fresh Orange almarai Juice 200 ml", "Fresh Apple almarai Juice 200 ml", "Fresh mango almarai Juice 200 ml", "Fresh Mix Fruit almarai Juice 200 ml", "Fresh mix berry almarai Juice 200 ml", "Fresh Orange with pulp almarai Juice 300 ml", "Fresh Mango with pulp almarai Juice 300 ml", "Fresh Apple almarai Juice 300 ml", "Fresh Straberry almarai juice 300 ml", "Fresh Fruit Cocktail almarai juice 300 ml", "ALBAIK Cheese Slices Cheddar-Full Fat" ], "Aquat": [ "ALBAIK CHICKEN BREADED", "ALBAIK CHICKEN SPICY BREADED", "ALBAIK CHICKEN MARINATED", "ALBAIK CHICKEN SPICY MARINATED", "ALBAIK CHICKEN FILLET NUGGETS", "ALBAIK CHICKEN FILLET NUGGETS SPICY", "ALBAIK CHICKEN FILLET SUPER", "ALBAIK CHICKEN FILLET SUPER SPICY", "ALBAIK CHICKEN FINGER", "ALBAIK CHICKEN FILLET NUGGETS HAJJ", "ALBAIK CHICKEN FILLET BURGER", "ALBAIK CHICKEN FILLET BURGER SPICY", "ALBAIK CHICKEN FILLET SUPER XT", "ALBAIK CHICKEN FILLET SUPER SPICY XT", "ALBAIK FISH FILLET NUGGETS", "ALBAIK FISH FILLET SUPER", "ALBAIK FISH FILLET NUGGETS SPICY", "ALBAIK FISH FILLET SUPER SPICY", "ALBAIK SHRIMPS JUMBO", "ALBAIK SHRIMPS VALUE", "ALBAIK SANDWICH SHRIMPS", "ALBAIK HOMMOS DIP PORTION", "ALBAIK GARLIC SMALL PORTION", "ALBAIK GARLIC LARGE PORTION", "ALBAIK COCKTAIL SMALL PORTION", "ALBAIK COCKTAIL LARGE PORTION", "ALBAIK NUGGETS SAUCE PORTION", "ALBAIK GARLIC SUPER SAUCE", "ALBAIK SHRIMPS / CFB SUPER SAUCE", "ALBAIK LIGHT TARTAR SAUCE", "ALBAIK FISH SUPER SAUCE", "ALBAIK HOMMOS DIP BULK", "ALBAIK COLESLAW SAUCE", "ALBAIK CFB SPICY SUPER SAUCE", "ALBAIK COLESLAW PORTION", "ALBAIK COLESLAW VEGETABLES SANDWICH", "ALBAIK COLESLAW VEGETABLES BULK", "ALBAIK PICKLES CUCUMBER", "ALBAIK PICKLES CUCUMBER SPICY", "ALBAIK PICKLES CUCUMBER SWEET", "ALBAIK GCF SAUCE", "ALBAIK FROZEN CHICKEN FILLET", "ALBAIK MARINATED CHICKEN STRIPS SPICY", "ALBAIK Falafel Nuggets", "ALBAIK Falafel Super Fillet", "ALBAIK Marinated Chicken Strips", "ALBAIK FROZEN CHCKEN MARINATED REGULAR", "ALBAIK FROZEN CHICKEN MARINATED SPICY", "ALBAIK Boneless Thighs Breaded", "ALBAIK Boneless Drumsticks Breaded", "ALBAIK Chicken Strips Breaded" ], "Eraqi Co.": [ "Corn Wire", "strow", "Corn Sticks", "Gloves Venyle- White - Box100 Glove", "Gloves (Pair) -Black", "Gloves Cotton (Pair) - White", "Gloves - Latex - Box100 Glove", "Mask - Box50 Glove", "Apron Nylon - 1000pcs/ carton", "Arm protiction", "Trash Bin - White - Super Large", "Trash Bin - Black - Large", "Plastic Bucket with Handle", "Plastic Bucket with Wheel", "Trash Bin - Small", "Sponges - small", "Sponges- Big", "Dust Pan -Small", "Dust Pan -Big", "Ground Wiper", "Glass Wiper", "Scrubber Iron", "Scrubber Pad -Iron", "Bandage Cloth", "Mop - cotton", "MOP Stick - Aluminium", "Metal Stick", "Sawani Brush", "Small Cloth", "Large Cloth", "Cleaning Brush- Small", "Mop Handle", "Water Pistol", "Water Hose", "Squeezing Mop", "Caution Board for Wet Area", "Glass Spray", "Soap Dispensor (Steel)", "Plastic Floor Mat", "German Broom with plastic", "Liquid Foam Hand Soap Pink", "Alcohol Gel Sanitizer", "Spoon- French Fries", "Knife-Small", "Knife- Big", "PREPARTION PAN FOR PICKLES", "PREPARTION PAN FOR SALAD", "COVER PAN FOR PICLES", "COVER PAN FOR SALAD", "SANDWICH PREPARATIONSPOON", "Toothpicks - box 1000 Pieces" ], "Saudi Industrial Projects Co. \"Pepsi\"": [ "Pepsi - can-330 ml", "Pepsi - Diet -can 330 ml", "Miranda -can -330 ml", "7 up -can -330 ml", "Soft Drinks", "Citrus -can -330 ml", "Lipton Ice Tea-can", "ALBAIK Shani - Can 360 ml" ] };
@@ -245,13 +166,6 @@
         const modalMessage = el('modal-message');
         const modalOkBtn = el('modal-ok-btn');
         const userIdEl = el('user-id');
-        const video = el('video');
-        const canvas = el('canvas');
-        const captureOptions = el('capture-options');
-        const cameraView = el('camera-view');
-        const previewSection = el('preview-section');
-        const capturedImagePreview = el('captured-image-preview');
-        const analysisLoader = el('analysis-loader');
         const dataForm = el('data-form');
         const dataTableBody = el('data-table-body');
         const noDataMessage = el('no-data-message');
@@ -259,8 +173,6 @@
         const tempValidationMsg = el('temp-validation-message');
         const tempValidationIcon = el('temp-validation-icon');
         const productTempInput = el('productTemperature');
-        const queueSection = el('queue-section');
-        const thumbnailQueue = el('thumbnail-queue');
 
         // --- Utility & Helper Functions ---
         const showModal = (message) => {
@@ -268,13 +180,6 @@
             modal.classList.remove('hidden');
         };
         const hideModal = () => modal.classList.add('hidden');
-        
-        const formatDateToYYYYMMDD = (mmddyyyyString) => {
-            if (!mmddyyyyString || mmddyyyyString === 'N/A') return '';
-            const parts = mmddyyyyString.split('/');
-            if (parts.length === 3) return `${parts[2]}-${parts[0].padStart(2, '0')}-${parts[1].padStart(2, '0')}`;
-            return mmddyyyyString; // Fallback for other formats
-        };
 
         const formatDateToMMDDYYYY = (date) => {
             if (!date) return 'N/A';
@@ -307,16 +212,6 @@
             return match ? parseFloat(match[0]) : null;
         };
         
-        const getSimilarityPercentage = (str1, str2) => {
-            if (!str1 || !str2) return 0;
-            const words1 = new Set(str1.toLowerCase().trim().split(/\s+/).filter(Boolean));
-            const words2 = new Set(str2.toLowerCase().trim().split(/\s+/).filter(Boolean));
-            if (words1.size === 0 || words2.size === 0) return 0;
-            const intersection = new Set([...words1].filter(word => words2.has(word)));
-            const union = new Set([...words1, ...words2]);
-            return (intersection.size / union.size) * 100;
-        };
-
         // --- UI Rendering ---
         const renderDataEntries = () => {
             dataTableBody.innerHTML = '';
@@ -332,7 +227,7 @@
                     const row = document.createElement('tr');
                     row.className = 'border-b hover:bg-gray-50';
                     row.innerHTML = `
-                        <td class="py-3 px-4 text-sm text-gray-700 whitespace-nowrap">${entry.timestamp ? new Date(entry.timestamp.seconds * 1000).toLocaleString() : 'N/A'}</td>
+                        <td class="py-3 px-4 text-sm text-gray-700 whitespace-nowrap">${new Date(entry.timestamp).toLocaleString()}</td>
                         <td class="py-3 px-4 text-sm text-gray-700">${entry.companyName || 'N/A'}</td>
                         <td class="py-3 px-4 text-sm text-gray-700">${entry.productName || 'N/A'}</td>
                         <td class="py-3 px-4 text-sm text-gray-700">${formatDateToMMDDYYYY(entry.productionDate)}</td>
@@ -375,258 +270,59 @@
             }
         };
 
-        // --- Camera & Image Handling ---
-        const stopCamera = () => {
-            if (cameraStream) {
-                cameraStream.getTracks().forEach(track => track.stop());
-                cameraStream = null;
-            }
-            video.srcObject = null;
-            cameraView.classList.add('hidden');
-            captureOptions.classList.remove('hidden');
-        };
-
-        const startCamera = async () => {
-            stopCamera();
-            try {
-                const constraints = { video: { facingMode: { exact: cameraFacingMode } } };
-                cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
-                video.srcObject = cameraStream;
-                cameraView.classList.remove('hidden');
-                captureOptions.classList.add('hidden');
-                previewSection.classList.add('hidden');
-            } catch (error) {
-                console.error("Camera Error:", error);
-                try {
-                    cameraStream = await navigator.mediaDevices.getUserMedia({ video: true });
-                    video.srcObject = cameraStream;
-                    cameraView.classList.remove('hidden');
-                    captureOptions.classList.add('hidden');
-                    previewSection.classList.add('hidden');
-                    showModal("Could not switch to the specific camera, using default.");
-                } catch (fallbackError) {
-                    showModal("Could not access camera. Please grant permissions.");
-                }
-            }
-        };
-        
-        const handleCapture = () => {
-            if (video.readyState === video.HAVE_ENOUGH_DATA) {
-                const context = canvas.getContext('2d');
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                capturedImage = canvas.toDataURL('image/png');
-                
-                capturedImagePreview.src = capturedImage;
-                previewSection.classList.remove('hidden');
-                
-                stopCamera();
-                analyzeImageWithGemini(capturedImage);
-            } else {
-                showModal("No camera stream active.");
-            }
-        };
-
-        const handleFileSelect = (event) => {
-            const files = event.target.files;
-            if (files.length > 0) {
-                imageQueue = []; // Clear previous queue
-                let filesToProcess = Array.from(files);
-
-                const processFile = (file) => {
-                    return new Promise((resolve) => {
-                        const reader = new FileReader();
-                        reader.onload = (e) => {
-                            imageQueue.push(e.target.result);
-                            resolve();
-                        };
-                        reader.readAsDataURL(file);
-                    });
+        // --- IndexedDB Logic ---
+        const openDB = () => {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open('dataValidationDB', 1);
+                request.onupgradeneeded = (event) => {
+                    db = event.target.result;
+                    if (!db.objectStoreNames.contains('entries')) {
+                        db.createObjectStore('entries', { keyPath: 'id', autoIncrement: true });
+                    }
                 };
-
-                // Process files sequentially to maintain order
-                filesToProcess.reduce((promise, file) => {
-                    return promise.then(() => processFile(file));
-                }, Promise.resolve()).then(() => {
-                    renderImageQueue();
-                    processNextImageInQueue();
-                });
-            }
-            event.target.value = null;
-        };
-        
-        const renderImageQueue = () => {
-            if (imageQueue.length > 0) {
-                queueSection.classList.remove('hidden');
-                thumbnailQueue.innerHTML = '';
-                imageQueue.forEach((imgSrc, index) => {
-                    const div = document.createElement('div');
-                    div.className = 'thumbnail-container p-1 rounded-lg';
-                    if (index === 0) {
-                        div.classList.add('processing');
-                    }
-                    div.innerHTML = `<img src="${imgSrc}" class="w-20 h-20 object-cover rounded-md">`;
-                    thumbnailQueue.appendChild(div);
-                });
-            } else {
-                queueSection.classList.add('hidden');
-            }
+                request.onsuccess = (event) => {
+                    db = event.target.result;
+                    resolve(db);
+                };
+                request.onerror = (event) => {
+                    reject('Error opening IndexedDB');
+                };
+            });
         };
 
-        const processNextImageInQueue = () => {
-            if (imageQueue.length > 0) {
-                capturedImage = imageQueue[0]; // Peek at the first image
-                capturedImagePreview.src = capturedImage;
-                previewSection.classList.remove('hidden');
-                analyzeImageWithGemini(capturedImage);
-            } else {
-                // All images processed
-                capturedImage = null;
-                previewSection.classList.add('hidden');
+        const addDataEntry = (formData) => {
+            const transaction = db.transaction(['entries'], 'readwrite');
+            const store = transaction.objectStore('entries');
+            const entry = { ...formData, timestamp: new Date().getTime() };
+            const request = store.add(entry);
+            request.onsuccess = () => {
+                showModal("Data saved successfully offline!");
                 dataForm.reset();
-                showModal("All images have been processed.");
-            }
-             renderImageQueue();
+                loadDataEntries();
+            };
+            request.onerror = () => {
+                showModal("Error saving data locally.");
+            };
         };
 
-        // --- AI & Data Processing ---
-        const analyzeImageWithGemini = async (imageData) => {
-            if (!imageData) {
-                showModal("No image data to analyze.");
-                return;
-            }
-            analysisLoader.style.display = 'flex';
-            try {
-                const base64ImageData = imageData.split(',')[1];
-                const prompt = `Extract 'Company Name', 'Product Code', 'Product Name', 'Production Date', 'Expiry Date', 'Batch Number', 'Truck Temperature', 'Product Temperature', and 'Quantity Comment'. Use MM/DD/YYYY for dates. Format as a JSON object with keys: 'companyName', 'productCode', 'productName', 'productionDate', 'expiryDate', 'batchNumber', 'truckTemperature', 'productTemperature', 'quantityComment'.`;
-                const payload = { contents: [{ role: "user", parts: [{ text: prompt }, { inlineData: { mimeType: "image/png", data: base64ImageData } }] }], generationConfig: { responseMimeType: "application/json", responseSchema: { type: "OBJECT", properties: { companyName: { type: "STRING" }, productCode: { type: "STRING" }, productName: { type: "STRING" }, productionDate: { type: "STRING" }, expiryDate: { type: "STRING" }, batchNumber: { type: "STRING" }, truckTemperature: { type: "STRING" }, productTemperature: { type: "STRING" }, quantityComment: { type: "STRING" } } } } };
-                const apiKey = ""; const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                const result = await response.json();
-
-                if (result.candidates?.[0]?.content?.parts?.[0]) {
-                    const jsonString = result.candidates[0].content.parts[0].text;
-                    const extractedData = JSON.parse(jsonString);
-                    const rawProductName = (extractedData.productName || '').trim();
-                    let bestProductOverallSimilarity = -1;
-                    let matchedProductFromList = '';
-                    let matchedCompanyForProduct = '';
-
-                    for (const company of companyNames) {
-                        if (productLists[company]) {
-                            for (const product of productLists[company]) {
-                                const currentSimilarity = getSimilarityPercentage(rawProductName, product);
-                                if (currentSimilarity > bestProductOverallSimilarity) {
-                                    bestProductOverallSimilarity = currentSimilarity;
-                                    matchedProductFromList = product;
-                                    matchedCompanyForProduct = company;
-                                }
-                            }
-                        }
-                    }
-
-                    let finalCompanyName = (extractedData.companyName || '').trim();
-                    let finalProductName = rawProductName;
-
-                    if (bestProductOverallSimilarity > 0) {
-                        finalProductName = matchedProductFromList;
-                        finalCompanyName = matchedCompanyForProduct;
-                        // No modal here to streamline the process
-                    } else {
-                        finalProductName = '';
-                        finalCompanyName = '';
-                        showModal("Analysis complete, but no matching product was found. Please select manually.");
-                    }
-
-                    // Populate form
-                    el('companyName').value = finalCompanyName;
-                    el('productName').value = finalProductName;
-                    el('productCode').value = (extractedData.productCode || '').trim();
-                    el('batchNumber').value = (extractedData.batchNumber || '').trim();
-                    el('productionDate').value = formatDateToYYYYMMDD(extractedData.productionDate);
-                    el('expiryDate').value = formatDateToYYYYMMDD(extractedData.expiryDate);
-                    el('truckTemperature').value = (extractedData.truckTemperature || '').trim();
-                    el('productTemperature').value = (extractedData.productTemperature || '').trim();
-                    el('quantityComment').value = (extractedData.quantityComment || '').trim();
-                    
-                    // Trigger updates
-                    updateProductDropdown();
-                    updateTemperatureValidationUI();
-
-                } else {
-                    showModal("AI could not extract data from the image.");
-                }
-            } catch (error) {
-                console.error("Gemini API Error:", error);
-                showModal("Error analyzing image. Please check network or try again.");
-            } finally {
-                analysisLoader.style.display = 'none';
-            }
+        const deleteDataEntry = (id) => {
+            const transaction = db.transaction(['entries'], 'readwrite');
+            const store = transaction.objectStore('entries');
+            const request = store.delete(Number(id));
+            request.onsuccess = () => {
+                showModal("Data deleted successfully.");
+                loadDataEntries();
+            };
         };
         
-        const checkTemperatureWithGemini = async () => {
-            const productName = el('productName').value;
-            const productTemperature = el('productTemperature').value;
-            if (!productName || !productTemperature) {
-                showModal("Please enter a Product Name and Temperature first.");
-                return;
-            }
-            el('temp-insight-btn-text').textContent = 'Checking...';
-            el('temp-insight-btn').disabled = true;
-
-            const category = getProductCategory(productName);
-            const standardRange = category !== 'N/A' ? temperatureRules[category].label : 'not specified';
-            try {
-                const prompt = `For a product named '${productName}', the standard storage temperature is '${standardRange}'. The recorded temperature is '${productTemperature}'. Please provide a brief comment on this deviation and its potential implications (e.g., spoilage, safety risk, quality loss). Be concise.`;
-                const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
-                const apiKey = ""; const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-                const response = await fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                const result = await response.json();
-                if (result.candidates?.[0]?.content?.parts?.[0]) {
-                    const insightText = result.candidates[0].content.parts[0].text;
-                    showModal(`Temperature Insight for ${productName}:\n\n${insightText}`);
-                } else {
-                    showModal("AI could not provide temperature insights.");
-                }
-            } catch (error) {
-                console.error("Gemini Temp Insight Error:", error);
-                showModal("Error getting temperature insights from AI.");
-            } finally {
-                el('temp-insight-btn-text').textContent = 'Get Temp Insights';
-                el('temp-insight-btn').disabled = false;
-            }
-        };
-
-        // --- Firebase Logic ---
-        const addDataEntry = async (formData) => {
-            if (!db || !userId) {
-                showModal("Database not ready or user not authenticated.");
-                return;
-            }
-            try {
-                const dataCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/camera_readings`);
-                await addDoc(dataCollectionRef, { ...formData, timestamp: new Date(), capturedImage });
-                
-                // After saving, process the next image
-                imageQueue.shift(); // Remove the processed image
-                processNextImageInQueue();
-                
-            } catch (error) {
-                console.error("Firestore Add Error:", error);
-                showModal(`Error saving data: ${error.message}`);
-            }
-        };
-
-        const deleteDataEntry = async (id) => {
-            if (!db || !userId) return;
-            try {
-                await deleteDoc(doc(db, `artifacts/${appId}/users/${userId}/camera_readings`, id));
-                showModal("Data deleted successfully!");
-            } catch (error) {
-                console.error("Error deleting document:", error);
-                showModal(`Error deleting data: ${error.message}`);
-            }
+        const loadDataEntries = () => {
+            const transaction = db.transaction(['entries'], 'readonly');
+            const store = transaction.objectStore('entries');
+            const request = store.getAll();
+            request.onsuccess = () => {
+                dataEntries = request.result.sort((a, b) => b.timestamp - a.timestamp);
+                renderDataEntries();
+            };
         };
         
         // --- Searchable Dropdown Logic ---
@@ -713,63 +409,18 @@
         };
 
         // --- Init & Event Listeners ---
-        document.addEventListener('DOMContentLoaded', () => {
-            // Firebase Init
-            const firebaseConfig = JSON.parse(window.__firebase_config || '{}');
-            const firebaseApp = initializeApp(firebaseConfig);
-            auth = getAuth(firebaseApp);
-            db = getFirestore(firebaseApp);
-            // setLogLevel('debug');
-
-            onAuthStateChanged(auth, async (user) => {
-                if (user) {
-                    userId = user.uid;
-                    userIdEl.textContent = userId;
-                    isAuthReady = true;
-                    el('save-data-btn').disabled = false;
-
-                    // Start listening to data
-                    const dataCollectionRef = collection(db, `artifacts/${appId}/users/${userId}/camera_readings`);
-                    const q = query(dataCollectionRef);
-                    onSnapshot(q, (snapshot) => {
-                        dataEntries = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                        dataEntries.sort((a, b) => (b.timestamp?.toDate() || 0) - (a.timestamp?.toDate() || 0));
-                        renderDataEntries();
-                    }, (error) => console.error("Firestore fetch error:", error));
-
-                } else {
-                    isAuthReady = false;
-                    el('save-data-btn').disabled = true;
-                }
-            });
-
-            const signIn = async () => {
-                const initialAuthToken = window.__initial_auth_token;
-                if (initialAuthToken && initialAuthToken !== 'undefined') {
-                    try { await signInWithCustomToken(auth, initialAuthToken); } catch (error) { console.error("Custom token sign-in failed, falling back to anonymous", error); await signInAnonymously(auth); }
-                } else {
-                    try {
-                        await signInAnonymously(auth);
-                    } catch(error) {
-                         console.error("Anonymous sign-in failed", error);
-                         showModal("Could not connect to the database. Please check your connection and Firebase setup.");
-                    }
-                }
-            };
-            signIn();
+        document.addEventListener('DOMContentLoaded', async () => {
+            
+            try {
+                await openDB();
+                loadDataEntries();
+                userIdEl.textContent = 'Offline Mode';
+            } catch (error) {
+                showModal("Could not initialize local database.");
+            }
 
             // Event Listeners
             modalOkBtn.addEventListener('click', hideModal);
-            el('start-camera-btn').addEventListener('click', startCamera);
-            el('upload-btn').addEventListener('click', () => el('file-input').click());
-            el('file-input').addEventListener('change', handleFileSelect);
-            el('capture-btn').addEventListener('click', handleCapture);
-            el('switch-camera-btn').addEventListener('click', () => {
-                cameraFacingMode = cameraFacingMode === 'user' ? 'environment' : 'user';
-                startCamera();
-            });
-            
-            el('temp-insight-btn').addEventListener('click', checkTemperatureWithGemini);
             
             productTempInput.addEventListener('input', updateTemperatureValidationUI);
             el('productName').addEventListener('change', updateTemperatureValidationUI);
@@ -807,7 +458,7 @@
                 if (dataEntries.length === 0) { showModal("No data to export."); return; }
                 const headers = ['Timestamp', 'Company Name', 'Product Code', 'Product Name', 'Production Date', 'Expiry Date', 'Batch Number', 'Truck Temperature', 'Product Temperature', 'Quantity Comment'];
                 const dataForXLSX = [headers, ...dataEntries.map(entry => [
-                    entry.timestamp ? new Date(entry.timestamp.seconds * 1000).toLocaleString() : '',
+                    entry.timestamp ? new Date(entry.timestamp).toLocaleString() : '',
                     entry.companyName || '', entry.productCode || '', entry.productName || '',
                     formatDateToMMDDYYYY(entry.productionDate), formatDateToMMDDYYYY(entry.expiryDate),
                     entry.batchNumber || '', formatTemperature(entry.truckTemperature),
@@ -831,6 +482,50 @@
             
             // Initial UI state
             renderDataEntries();
+        });
+
+        // Service Worker for Offline Caching
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').then(function(registration) {
+                console.log('Service Worker registered with scope:', registration.scope);
+            }).catch(function(error) {
+                console.log('Service Worker registration failed:', error);
+            });
+        }
+    </script>
+    <script>
+        // This is the service worker script. It should be in a separate file named sw.js in the same directory as your HTML file.
+        // For the purpose of this single file, I'm including it here. You should separate it for production.
+        const CACHE_NAME = 'data-validation-app-cache-v1';
+        const urlsToCache = [
+            '/',
+            'index.html', // Assuming your html file is named index.html
+            'https://cdn.tailwindcss.com',
+            'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
+            'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'
+        ];
+
+        self.addEventListener('install', event => {
+            event.waitUntil(
+                caches.open(CACHE_NAME)
+                    .then(cache => {
+                        console.log('Opened cache');
+                        return cache.addAll(urlsToCache);
+                    })
+            );
+        });
+
+        self.addEventListener('fetch', event => {
+            event.respondWith(
+                caches.match(event.request)
+                    .then(response => {
+                        if (response) {
+                            return response;
+                        }
+                        return fetch(event.request);
+                    }
+                )
+            );
         });
     </script>
 </body>
